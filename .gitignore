@@ -22,3 +22,8 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Interview answers and checklists (should not be committed)
+README-backend-answers.md
+CHECKLIST-frontend.md
+CHECKLIST-backend.md
