@@ -1,28 +1,33 @@
-import { useState } from 'react';
-import { Priority } from '../types';
-import './TaskForm.css';
+import { useState } from "react";
+import { Priority } from "../types";
+import "./TaskForm.css";
 
 interface TaskFormProps {
-  onSubmit: (task: { title: string; description: string; priority: Priority; status: 'incomplete' }) => void;
+  onSubmit: (task: {
+    title: string;
+    description: string;
+    priority: Priority;
+    status: "incomplete";
+  }) => void;
 }
 
 export default function TaskForm({ onSubmit }: TaskFormProps) {
-  const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
-  const [priority, setPriority] = useState<Priority>('Medium');
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [priority, setPriority] = useState<Priority>("Medium");
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (title.trim()) {
       onSubmit({
         title: title.trim(),
         description: description.trim(),
         priority,
-        status: 'incomplete',
+        status: "incomplete",
       });
-      setTitle('');
-      setDescription('');
-      setPriority('Medium');
+      setTitle("");
+      setDescription("");
+      setPriority("Medium");
     }
   };
 
@@ -64,4 +69,3 @@ export default function TaskForm({ onSubmit }: TaskFormProps) {
     </form>
   );
 }
-

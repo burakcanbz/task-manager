@@ -114,10 +114,10 @@ export default function TaskItem({
             <p className="task-description">{task.description}</p>
           )}
           <div className="task-actions">
-            <button onClick={onEdit} className="btn-edit">
+            <button onClick={onEdit} className="btn-edit" disabled={task.status === "completed"}>
               Edit
             </button>
-            <button onClick={onDelete} className="btn-delete">
+            <button onClick={onDelete} className="btn-delete"  disabled={task.status === "completed"}>
               Delete
             </button>
           </div>

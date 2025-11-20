@@ -1,127 +1,155 @@
-# Frontend Developer Interview - Mid-Senior Level
+# Task Manager API
 
-**Duration:** 45 minutes  
-**Format:** Verbal Discussion + Live Coding Session
-
----
-
-## Interview Structure
-
-1. **Verbal Questions** (15 minutes)
-2. **Live Coding Challenge** (30 minutes)
+A **Task Management API** built with **FastAPI** using a **layered architecture** and **SQLAlchemy** for database operations. This project demonstrates a clean separation of concerns, maintainable code structure, and scalable design, with support for environment-based configuration and Docker deployment.
 
 ---
 
-## Part 1: Verbal Questions (15 minutes)
+## Table of Contents
 
-### React Fundamentals & Best Practices
-
-**Q1: Component Lifecycle & Hooks**
-- Can you explain the difference between `useEffect` with an empty dependency array `[]` versus no dependency array at all?
-- When would you use `useLayoutEffect` instead of `useEffect`? Can you provide a practical example?
-
-**Q2: State Management**
-- In a React application, when would you choose to use `useReducer` over `useState`? What are the trade-offs?
-- How do you handle complex state updates that depend on previous state values? Can you walk me through your approach?
-
-**Q3: Performance Optimization**
-- What strategies do you use to optimize React component re-renders?
-- Can you explain the concept of memoization in React? When would you use `React.memo`, `useMemo`, or `useCallback`?
-
-**Q4: Component Architecture**
-- How do you decide when to break down a component into smaller components?
-- Can you describe a scenario where you've used the Compound Component pattern or Render Props pattern? What problem did it solve?
-
-**Q5: TypeScript & Type Safety**
-- How do you approach typing complex React components, especially when dealing with generic components or higher-order components?
-- What's your strategy for handling type safety with event handlers and form inputs?
+- Environment Configuration
+- Requirements
+- Local Setup
+- Docker Setup
+- Usage
+- Additional Notes
 
 ---
 
-## Part 2: Live Coding Challenge (30 minutes)
+## Architecture
 
-### Task: Interactive Task Manager with Filtering & Search
+The API is designed using a **layered architecture**, which separates responsibilities into different layers:
 
-You'll be building a **Task Manager** component that allows users to create, manage, and organize tasks with advanced filtering and search capabilities. This challenge will test your React skills, state management, and ability to create an interactive user experience.
+1. **Controller** – Handles incoming HTTP requests and responses, validation, and delegates business logic to services.
+2. **Service** – Contains the core business logic and orchestrates operations between repositories and other utilities.
+3. **DTO (Data Transfer Object)** – Defines the shape of data that flows between layers, ensuring type safety and validation separate from the database model.
+4. **Repository** – Handles direct interaction with the database via SQLAlchemy, encapsulating CRUD operations.
+5. **Model** – Defines SQLAlchemy models corresponding to database tables.
+6. **Data** – Contains seeders for initial database population.
+7. **Config** – Manages database connection, environment variables, and dependency injection for using same service but different db instance.
+8. **Utils** – Contains helper scripts like `clean_tasks` and `seed_data` for database operations or maintenance tasks.
 
-#### Requirements
-
-1. **Task Management**
-   - Users should be able to add new tasks with:
-     - A title (required)
-     - An optional description
-     - A priority level (Low, Medium, High)
-     - A completion status (completed/incomplete)
-   - Tasks should be editable (inline editing or edit mode)
-   - Tasks should be deletable
-   - Users should be able to toggle task completion status
-
-2. **Filtering & Search**
-   - Implement a search bar that filters tasks by title or description (real-time search)
-   - Add filter buttons/options to filter by:
-     - Priority level (show All, Low, Medium, or High priority tasks)
-     - Completion status (show All, Completed, or Incomplete tasks)
-   - Filters should work together (e.g., search + priority filter + status filter)
-
-3. **Sorting**
-   - Add ability to sort tasks by:
-     - Priority (High → Low)
-     - Creation order (newest first or oldest first)
-   - Sorting should work in combination with filters
-
-4. **State Management**
-   - Manage all tasks and filter/search/sort states within the component
-   - Ensure state updates are handled correctly and efficiently
-   - Consider performance when filtering/searching large lists
-
-5. **UI/UX Considerations**
-   - Display task count (e.g., "5 tasks" or "3 of 5 tasks completed")
-   - Show visual indicators for priority levels (colors, badges, etc.)
-   - Make it visually appealing and intuitive
-   - Add smooth transitions where appropriate
-   - Ensure the interface is responsive
-
-#### Technical Constraints
-
-- Use React hooks (`useState`, `useEffect`, `useMemo`, `useCallback` as needed)
-- TypeScript is required - ensure proper typing throughout
-- Focus on clean, maintainable code and component composition
-- You don't need to persist data (no backend required)
-- Consider performance optimizations for filtering/searching
-
-#### Evaluation Criteria
-
-- **Code Quality**: Clean, readable, and well-structured code
-- **React Best Practices**: Proper use of hooks, component composition, and state management
-- **TypeScript**: Proper type definitions and type safety
-- **Functionality**: All features work as expected and filters work together correctly
-- **Performance**: Efficient filtering and searching (consider memoization)
-- **User Experience**: Intuitive interface with good visual feedback
-- **Problem-Solving**: How you approach and solve the challenge
-
-#### Getting Started
-
-1. The project is already set up with React, TypeScript, and Vite
-2. Run `pnpm install` to install dependencies (if needed)
-3. Run `pnpm dev` to start the development server
-4. Start building in `src/App.tsx` or create new components as needed
-
-#### Tips
-
-- Start with the basic structure and add features incrementally
-- Don't worry about making it perfect - focus on demonstrating your thought process
-- Feel free to ask clarifying questions if anything is unclear
-- We're interested in seeing how you think through problems, not just the final solution
+**Why Layered Architecture?**
+- **Separation of concerns:** Each layer has a single responsibility.
+- **Maintainability:** Easier to modify or extend individual layers without affecting others.
+- **Testability:** Layers can be tested independently.
+- **Scalability:** Supports larger applications and teams by clearly separating responsibilities.
 
 ---
 
-## Notes for Interviewer
+## Environment Configuration
 
-- Allow the candidate to think out loud and explain their approach
-- Encourage questions and discussion during the coding session
-- Focus on problem-solving skills and code quality over perfect implementation
-- Be flexible with time allocation if the candidate needs more discussion or coding time
+The application uses environment-based configuration with `.env` files:
+
+- **Local Development:** `.env.dev`
+- **Production / Docker:** `.env.prod`
+
+Depending on the environment, the application automatically picks the correct `.env` file to configure the database connection and other environment variables.
+
+Example `.env` variables:
+
+```env
+POSTGRES_USER=postgres
+POSTGRES_PASSWORD=password
+POSTGRES_DB=taskdb
+POSTGRES_HOST=localhost  # Use 'db' when running in Docker
+POSTGRES_PORT=5432
+ENVIRONMENT=dev  # or 'prod' for production
+```
+
+**Environment Behavior:**
+- When running **locally**: `.env.dev` is used and `POSTGRES_HOST=localhost`
+- When running with **Docker**: `.env.prod` is used and `POSTGRES_HOST=db`
 
 ---
 
-**Good luck! We're excited to see what you build! 🚀**
+## Requirements
+
+- Python 3.13+
+- FastAPI
+- SQLAlchemy
+- PostgreSQL
+
+---
+
+## Local Setup
+
+1. Navigate to the API folder:
+
+```bash
+cd api
+```
+
+2. Create a virtual environment:
+
+```bash
+python -m venv venv
+```
+
+3. Activate the virtual environment:
+
+**macOS/Linux:**
+```bash
+source venv/bin/activate
+```
+
+**Windows (PowerShell):**
+```powershell
+.\venv\Scripts\Activate
+```
+
+4. Install dependencies:
+
+```bash
+pip install -r requirements.txt
+```
+
+5. Configure environment variables:
+
+Create a `.env.dev` file in the `api` folder with your local database settings.
+
+6. Run the FastAPI server:
+
+```bash
+uvicorn app:app --reload
+```
+
+The server will start on http://127.0.0.1:8000
+
+---
+
+## Docker Setup
+
+1. Ensure `.env.prod` has the correct database connection settings.
+
+2. From the project root, run:
+
+```bash
+docker-compose up -d --build
+```
+
+This will build and start both the FastAPI app and the PostgreSQL container.
+
+**Notes:**
+- The application requires a PostgreSQL database named `taskdb`
+- Docker networking ensures the FastAPI container can communicate with the PostgreSQL container using the host `db`
+- The app includes a retry mechanism for database connection to handle startup race conditions
+
+---
+
+## Usage
+
+The API provides full CRUD operations for tasks with the following features:
+
+- Create, read, update, and delete tasks
+- Filter tasks by priority and status
+- Sort tasks by creation date or priority
+- The frontend can connect to the API endpoints as defined in `BASE_URL`
+
+---
+
+## Additional Notes
+
+- The project includes utility scripts for database cleaning and seeding
+- Seeders can be found in the `data` folder
+- The layered architecture allows you to easily extend functionality without touching unrelated layers
+- Use `python -m data.seeder` to populate the database with sample data

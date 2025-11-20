@@ -1,0 +1,148 @@
+{
+  "tasks": [
+    {
+      "id": 1,
+      "title": "Complete project documentation",
+      "description": "Write comprehensive documentation for the task manager application including API endpoints and user guide",
+      "priority": "High",
+      "status": "incomplete",
+      "createdAt": 1763424578775
+    },
+    {
+      "id": 2,
+      "title": "Review code changes",
+      "description": "Review pull requests from team members and provide feedback",
+      "priority": "High",
+      "status": "completed",
+      "createdAt": 1763510978775
+    },
+    {
+      "id": 3,
+      "title": "Update dependencies",
+      "description": "Check and update npm packages to latest stable versions",
+      "priority": "Medium",
+      "status": "incomplete",
+      "createdAt": 1763338178775
+    },
+    {
+      "id": 4,
+      "title": "Design new UI components",
+      "description": "Create mockups for the new dashboard interface",
+      "priority": "Medium",
+      "status": "incomplete",
+      "createdAt": 1763251778775
+    },
+    {
+      "id": 5,
+      "title": "Fix bug in filter functionality",
+      "description": "Investigate and fix the issue with search filter not working correctly",
+      "priority": "High",
+      "status": "completed",
+      "createdAt": 1763165378775
+    },
+    {
+      "id": 6,
+      "title": "Write unit tests",
+      "description": "Add unit tests for task management functions",
+      "priority": "Medium",
+      "status": "incomplete",
+      "createdAt": 1763078978775
+    },
+    {
+      "id": 7,
+      "title": "Organize team meeting",
+      "description": "Schedule and prepare agenda for weekly team sync",
+      "priority": "Low",
+      "status": "completed",
+      "createdAt": 1762992578775
+    },
+    {
+      "id": 8,
+      "title": "Optimize database queries",
+      "description": "Review and optimize slow database queries in the backend",
+      "priority": "High",
+      "status": "incomplete",
+      "createdAt": 1762906178775
+    },
+    {
+      "id": 9,
+      "title": "Update README file",
+      "description": "Add installation and usage instructions to README",
+      "priority": "Low",
+      "status": "incomplete",
+      "createdAt": 1762819778775
+    },
+    {
+      "id": 10,
+      "title": "Implement dark mode",
+      "description": "Add dark mode theme toggle to the application",
+      "priority": "Medium",
+      "status": "completed",
+      "createdAt": 1762733378775
+    },
+    {
+      "id": 11,
+      "title": "Set up CI/CD pipeline",
+      "description": "Configure GitHub Actions for automated testing and deployment",
+      "priority": "High",
+      "status": "incomplete",
+      "createdAt": 1762646978775
+    },
+    {
+      "id": 12,
+      "title": "Refactor authentication module",
+      "description": "Improve code structure and security of authentication system",
+      "priority": "Medium",
+      "status": "incomplete",
+      "createdAt": 1762560578775
+    },
+    {
+      "id": 13,
+      "title": "Create user onboarding flow",
+      "description": "Design and implement welcome screens for new users",
+      "priority": "Low",
+      "status": "completed",
+      "createdAt": 1762474178775
+    },
+    {
+      "id": 14,
+      "title": "Add error logging",
+      "description": "Implement comprehensive error logging and monitoring",
+      "priority": "Medium",
+      "status": "incomplete",
+      "createdAt": 1762387778775
+    },
+    {
+      "id": 15,
+      "title": "Performance testing",
+      "description": "Run load tests and identify performance bottlenecks",
+      "priority": "High",
+      "status": "incomplete",
+      "createdAt": 1762301378775
+    },
+    {
+      "id": 16,
+      "title": "Update user documentation",
+      "description": "Create video tutorials for common user workflows",
+      "priority": "Low",
+      "status": "incomplete",
+      "createdAt": 1762214978775
+    },
+    {
+      "id": 17,
+      "title": "Implement search suggestions",
+      "description": "Add autocomplete functionality to search bar",
+      "priority": "Medium",
+      "status": "completed",
+      "createdAt": 1762128578775
+    },
+    {
+      "id": 18,
+      "title": "Security audit",
+      "description": "Conduct security review and fix vulnerabilities",
+      "priority": "High",
+      "status": "incomplete",
+      "createdAt": 1762042178775
+    }
+  ]
+}

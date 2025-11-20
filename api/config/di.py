@@ -1,0 +1,16 @@
+from fastapi import Depends
+from sqlalchemy.orm import Session
+from repository.task_repository import TaskRepository
+from repository.repository import Repository
+from service.task_service import TaskService
+from config.db import get_db
+
+"We use single service instance here. No need to recreate instance again and again. DB session not thread-safe but the requests are stateles. No problem to use single instance here."
+task_service_instance = TaskService()
+
+"We can use other repositories here, cause we decide repository at run-time and each Repository should implement Repository Abstract Class"
+def get_task_repository(db: Session = Depends(get_db)) -> Repository:
+    return TaskRepository(db)
+
+def get_task_service(repo: Repository = Depends(get_task_repository)) -> TaskService:
+    return task_service_instance

@@ -11,6 +11,7 @@ export interface Task {
   priority: Priority;
   status: TaskStatus;
   createdAt: number;
+  updatedAt: number;
 }
 
 export type PriorityFilter = 'All' | Priority;
