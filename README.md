@@ -5,7 +5,7 @@ A **Task Management API** built with **FastAPI** using a **layered architecture*
 ---
 
 ## Table of Contents
-
+- Architecture
 - Environment Configuration
 - Requirements
 - Local Setup
