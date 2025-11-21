@@ -24,7 +24,7 @@ The API is designed using a **layered architecture**, which separates responsibi
 3. **DTO (Data Transfer Object)** – Defines the shape of data that flows between layers, ensuring type safety and validation separate from the database model.
 4. **Repository** – Handles direct interaction with the database via SQLAlchemy, encapsulating CRUD operations.
 5. **Model** – Defines SQLAlchemy models corresponding to database tables.
-6. **Data** – Contains seeders for initial database population.
+6. **Data** – Contains tasks.json for initial database population.
 7. **Config** – Manages database connection, environment variables, and dependency injection for using same service but different db instance.
 8. **Utils** – Contains helper scripts like `clean_tasks` and `seed_data` for database operations or maintenance tasks.
 
@@ -53,7 +53,6 @@ POSTGRES_PASSWORD=password
 POSTGRES_DB=taskdb
 POSTGRES_HOST=localhost  # Use 'db' when running in Docker
 POSTGRES_PORT=5432
-ENVIRONMENT=dev  # or 'prod' for production
 ```
 
 **Environment Behavior:**
@@ -141,8 +140,6 @@ This will build and start both the FastAPI app and the PostgreSQL container.
 The API provides full CRUD operations for tasks with the following features:
 
 - Create, read, update, and delete tasks
-- Filter tasks by priority and status
-- Sort tasks by creation date or priority
 - The frontend can connect to the API endpoints as defined in `BASE_URL`
 
 ---
@@ -150,6 +147,6 @@ The API provides full CRUD operations for tasks with the following features:
 ## Additional Notes
 
 - The project includes utility scripts for database cleaning and seeding
-- Seeders can be found in the `data` folder
+- Seeders moved to utils file and can be found in the `utils` folder
 - The layered architecture allows you to easily extend functionality without touching unrelated layers
-- Use `python -m data.seeder` to populate the database with sample data
+- While running application with `uvicorn` it automatically set tasks using `seed_data` to taskdb. Or you can delete the tasks using `clean_tasks` function in utils/utils.py file. 
