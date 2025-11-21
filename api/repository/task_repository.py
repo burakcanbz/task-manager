@@ -1,6 +1,6 @@
 from fastapi import HTTPException
 from .repository import Repository
-from typing import List, Optional
+from typing import List
 from dto.task_schema import TaskCreate, TaskUpdate
 from sqlalchemy.orm import Session
 from model.task_model import Task
@@ -10,9 +10,9 @@ class TaskRepository(Repository):
     def __init__(self, db : Session):
         super().__init__(db)
 
-    def get_all(self) -> Optional[List[Task]] | None:
+    def get_all(self) -> List[Task]: # removed optional to make code pydantic cause .all() method always return list, fullfilled or empty.
         tasks = self.db.query(Task).all()
-        return tasks if tasks else None
+        return tasks 
 
 
     def add(self, task: TaskCreate) -> Task:
@@ -42,7 +42,7 @@ class TaskRepository(Repository):
     def delete(self, id: int) -> str:
         task = self.db.query(Task).filter(Task.id == id).first()
         if not task:
-            return False
+            return {"message": "task not found"}
         
         self.db.delete(task)
         self.db.commit()

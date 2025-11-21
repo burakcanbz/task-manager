@@ -17,13 +17,13 @@ class Repository(ABC, Generic[T, C]):
         pass
 
     @abstractmethod
-    def add(self, item: C) -> None:
+    def add(self, item: C) -> T:
         pass
 
     @abstractmethod
-    def update(self, id: int, item: Any) -> None:
+    def update(self, id: int, item: C) -> T:
         pass
 
     @abstractmethod
-    def delete(self, id: int) -> None:
+    def delete(self, id: int) -> str:
         pass
