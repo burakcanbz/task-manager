@@ -19,11 +19,12 @@ if db.query(Task).count() == 0:
 db.close()
 
 origins = [
-    "http://localhost:3000",  
-    "http://127.0.0.1:3000",
-    "*",
+    "http://localhost:5173", # Change port to vite default port  
+    "http://127.0.0.1:5713",
+    "*", # Allow all origins
 ]
 
+# Enable credentials from coming requests.
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
