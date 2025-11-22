@@ -1,15 +1,16 @@
-import os
-import asyncio
 from config.db import Base, engine
 
-from fastapi import FastAPI, APIRouter
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from model.task_model import Task
 from controller import task_controller
-from utils.utils import seed_data, clean_tasks
+from utils.utils import seed_data #clean_tasks
+from exception.exception_handler import setup_exception_handlers
 from config.db import SessionLocal
 
 app = FastAPI(title="Task Manager API")
+
+setup_exception_handlers(app)
 
 Base.metadata.create_all(bind=engine)
 

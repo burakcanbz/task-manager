@@ -1,12 +1,11 @@
 
-from fastapi import HTTPException
-from sqlalchemy.exc import IntegrityError
-from model.task_model import Task
-from dto.task_schema import TaskCreate, TaskUpdate
 from typing import List
 from datetime import datetime
 
+from exception.exception_handler import AppException
+from dto.task_schema import TaskCreate, TaskUpdate
 from repository.repository import Repository
+from model.task_model import Task
 
 class TaskService():
 
@@ -21,7 +20,7 @@ class TaskService():
 
         duplicate_task = next((t for t in existing_task if t.title == task_data.title), None)
         if duplicate_task:
-            raise HTTPException(status_code=400, detail="Task with this title already exists")
+            raise AppException(status_code=400, detail=f"Task with title: '{task_data.title}' already exists", code="Duplicate Title")
         
         task = Task(**task_data.dict())
         return self.repository.add(task)
@@ -30,7 +29,7 @@ class TaskService():
         task: Task = self.repository.get_by_id(id)
 
         if not task:
-            raise HTTPException(status_code=404, detail="Task not found")
+            raise AppException(status_code=404, detail=f"Task with update id: '{id}' not found", code="Task Not Found")
         update_data = task_data.dict(exclude_unset=True)
 
         for key, value in update_data.items():
@@ -43,7 +42,7 @@ class TaskService():
         task: Task = self.repository.get_by_id(id)
 
         if not task:
-            raise HTTPException(status_code=404, detail="Task not found")
+            raise AppException(status_code=404, detail=f"Task with delete id: '{id}' not found", code="Task Not Found")
         
         self.repository.delete(task)
         return True

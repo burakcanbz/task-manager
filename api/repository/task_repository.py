@@ -1,15 +1,15 @@
-from fastapi import HTTPException
-from sqlalchemy.orm import Session
 from sqlalchemy.exc import SQLAlchemyError
-from .repository import Repository
+from sqlalchemy.orm import Session
 from typing import List
+
+from .repository import Repository
 from model.task_model import Task
 
 class TaskRepository(Repository):
     def __init__(self, db : Session):
         super().__init__(db)
 
-    def get_all(self) -> List[Task]: # removed optional to make code pydantic cause .all() method always return list, fullfilled or empty.
+    def get_all(self) -> List[Task]:
         tasks = self.db.query(Task).all()
         return tasks 
 
@@ -21,9 +21,9 @@ class TaskRepository(Repository):
             self.db.add(task)
             self.db.commit()
             self.db.refresh(task)
-        except SQLAlchemyError as e:
+        except SQLAlchemyError:
             self.db.rollback()
-            raise HTTPException(status_code=500, detail=f"Could not add task with id and body: {task.id} -> {task}")
+            raise
         return task
 
     def update(self, task: Task) -> Task:
@@ -31,9 +31,9 @@ class TaskRepository(Repository):
             self.db.add(task)
             self.db.commit()
             self.db.refresh(task)
-        except SQLAlchemyError as e:
+        except SQLAlchemyError:
             self.db.rollback()
-            raise HTTPException(status_code=500, detail=f"Could not update task with id: {task.id}")
+            raise
         return task
 
     def delete(self, task: Task) -> bool:
@@ -42,5 +42,5 @@ class TaskRepository(Repository):
             self.db.commit()
         except SQLAlchemyError:
             self.db.rollback()
-            raise HTTPException(status_code=400, detail=f"Could not delete task with id: {task.id}")
+            raise
         return True

@@ -1,9 +1,10 @@
 import os
 import time
-from sqlalchemy import create_engine
+
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker
 from sqlalchemy.exc import OperationalError
+from sqlalchemy.orm import sessionmaker
+from sqlalchemy import create_engine
 from dotenv import load_dotenv
 
 env = os.getenv("ENVIRONMENT", "dev")
