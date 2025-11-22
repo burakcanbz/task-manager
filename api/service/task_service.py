@@ -17,11 +17,17 @@ class TaskService():
         return self.repository.get_all()
     
     def add_task(self, task_data: TaskCreate) -> Task:
+        existing_task: List[Task] = self.repository.get_all()
+
+        duplicate_task = next((t for t in existing_task if t.title == task_data.title), None)
+        if duplicate_task:
+            raise HTTPException(status_code=400, detail="Task with this title already exists")
+        
         task = Task(**task_data.dict())
         return self.repository.add(task)
     
     def update_task(self, id: int, task_data: TaskUpdate) -> Task:
-        task = self.repository.get_by_id(id)
+        task: Task = self.repository.get_by_id(id)
 
         if not task:
             raise HTTPException(status_code=404, detail="Task not found")
@@ -34,8 +40,8 @@ class TaskService():
         return self.repository.update(task)
     
     def delete_task(self, id: int) -> bool:
-        task = self.repository.get_by_id(id)
-        
+        task: Task = self.repository.get_by_id(id)
+
         if not task:
             raise HTTPException(status_code=404, detail="Task not found")
         
