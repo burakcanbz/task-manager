@@ -1,22 +1,43 @@
 
+from fastapi import HTTPException
 from sqlalchemy.exc import IntegrityError
 from model.task_model import Task
 from dto.task_schema import TaskCreate, TaskUpdate
 from typing import List
+from datetime import datetime
 
 from repository.repository import Repository
 
 class TaskService():
 
-    def get_all(self, repository: Repository) -> List[Task]:
-        return repository.get_all()
+    def __init__(self, repo: Repository):
+        self.repository = repo
+
+    def get_all(self) -> List[Task]: # already returning empty list if no task in db.
+        return self.repository.get_all()
     
-    "We pass new db for every request but we use same service for all requests, using coroutine here."
-    def add_task(self, task_data: TaskCreate, repository: Repository) -> Task:
-        return repository.add(task_data)
+    def add_task(self, task_data: TaskCreate) -> Task:
+        task = Task(**task_data.dict())
+        return self.repository.add(task)
     
-    def update_task(self, id: int, task_data: TaskUpdate, repository: Repository) -> Task:
-        return repository.update(id, task_data)
+    def update_task(self, id: int, task_data: TaskUpdate) -> Task:
+        task = self.repository.get_by_id(id)
+
+        if not task:
+            raise HTTPException(status_code=404, detail="Task not found")
+        update_data = task_data.dict(exclude_unset=True)
+
+        for key, value in update_data.items():
+            setattr(task, key, value)
+
+        task.updatedAt = datetime.utcnow()
+        return self.repository.update(task)
     
-    def delete_task(self, id: int, repository: Repository) -> str:
-        return repository.delete(id)
+    def delete_task(self, id: int) -> bool:
+        task = self.repository.get_by_id(id)
+        
+        if not task:
+            raise HTTPException(status_code=404, detail="Task not found")
+        
+        self.repository.delete(task)
+        return True

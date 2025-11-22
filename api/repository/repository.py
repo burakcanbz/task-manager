@@ -17,11 +17,15 @@ class Repository(ABC, Generic[T, C]):
         pass
 
     @abstractmethod
+    def get_by_id(self) -> T:
+        pass
+
+    @abstractmethod
     def add(self, item: C) -> T:
         pass
 
     @abstractmethod
-    def update(self, id: int, item: C) -> T:
+    def update(self, item: C) -> T:
         pass
 
     @abstractmethod
