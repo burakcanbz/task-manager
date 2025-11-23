@@ -24,6 +24,7 @@ DATABASE_URL = f"postgresql://{user}:{password}@{host}:{port}/{db}"
 
 max_retries = 5
 retry_delay = 2  
+engine = None
 
 for attempt in range(max_retries):
     try:

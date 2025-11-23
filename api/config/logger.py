@@ -1,19 +1,21 @@
 import logging
 
-LOG_FORMAT = ("%(asctime)s | %(levelname)s | %(message)s ")
+LOG_FORMAT = "%(asctime)s | %(levelname)s | %(message)s"
 
-logging.basicConfig(level=logging.INFO, format=LOG_FORMAT)
 logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
+logger.propagate = False 
 
-file_handler = logging.FileHandler("app.log")
-file_handler.setLevel(logging.INFO)
-
+# Console handler
 console_handler = logging.StreamHandler()
 console_handler.setLevel(logging.INFO)
-
-formatter = logging.Formatter("%(asctime)s - %(levelname)s - %(message)s")
-file_handler.setFormatter(formatter)
-console_handler.setFormatter(formatter)
-
-logger.addHandler(file_handler)
+console_formatter = logging.Formatter(LOG_FORMAT)
+console_handler.setFormatter(console_formatter)
 logger.addHandler(console_handler)
+
+# File handler
+file_handler = logging.FileHandler("app.log", encoding='utf-8')
+file_handler.setLevel(logging.INFO)
+file_formatter = logging.Formatter(LOG_FORMAT)
+file_handler.setFormatter(file_formatter)
+logger.addHandler(file_handler)
