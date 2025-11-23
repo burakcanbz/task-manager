@@ -6,7 +6,7 @@ from .app_exception import AppException
 from config.logger import logger
 
 async def general_exception_handler(req: Request, error: Exception):
-    logger.error(f"Exception occured for request URL: {req.url} \n\t error_code: 500 | error_details: {error}")
+    await logger.error(f"Exception occured for request URL: {req.url} \n\t error_code: 500 | error_details: {error}")
     
     return JSONResponse(
         status_code=500,
@@ -14,8 +14,8 @@ async def general_exception_handler(req: Request, error: Exception):
     )
 
 async def app_exception_handler(req: Request, error: AppException):
-    logger.error(
-        f"AppException occurred for request URL: {req.url} \n\terror_code: {error.code} | error_details: {error.detail}"
+    await logger.error(
+        f"AppException occurred for request URL: {req.url} \n\terror_code: {error.status_code} | error_details: {error.detail} | error_tpye: {error.code}"
     )
     return JSONResponse(
         status_code=error.status_code,
@@ -23,7 +23,7 @@ async def app_exception_handler(req: Request, error: AppException):
     )
 
 async def sqlalchemy_exception_handler(req: Request, error: SQLAlchemyError):
-    logger.error(
+    await logger.error(
         f"Database exception occured for request URL: {req.url} \n\terror_code: 500 | error_details: {error}"
     )
     return JSONResponse(

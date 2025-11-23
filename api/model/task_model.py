@@ -6,7 +6,7 @@ class Task(Base):
     __tablename__ = "tasks"
 
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
-    title = Column(String(100), nullable=False)
+    title = Column(String(100), unique=True, nullable=False)
     description = Column(String(300), nullable=True)
     status = Column(String(20), nullable=True)
     priority = Column(String(50), nullable=False)
