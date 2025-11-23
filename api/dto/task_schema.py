@@ -31,3 +31,7 @@ class TaskResponse(BaseModel):
     status: Status
     createdAt: datetime 
     updatedAt: datetime
+
+    model_config = {
+        "from_attributes": True
+    }

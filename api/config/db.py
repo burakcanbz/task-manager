@@ -1,10 +1,7 @@
 import os
-import time
 
+from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession, async_sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.exc import OperationalError
-from sqlalchemy.orm import sessionmaker
-from sqlalchemy import create_engine
 from dotenv import load_dotenv
 
 env = os.getenv("ENVIRONMENT", "dev")
@@ -18,33 +15,39 @@ user = os.getenv("POSTGRES_USER")
 password = os.getenv("POSTGRES_PASSWORD")
 db = os.getenv("POSTGRES_DB")
 port = os.getenv("POSTGRES_PORT")
-host = os.getenv("POSTGRES_HOST", "localhost")
+host = os.getenv("POSTGRES_HOST")
 
-DATABASE_URL = f"postgresql://{user}:{password}@{host}:{port}/{db}"
+DATABASE_URL = f"postgresql+asyncpg://{user}:{password}@{host}:{port}/{db}"
 
 max_retries = 5
 retry_delay = 2  
 engine = None
 
-for attempt in range(max_retries):
-    try:
-        engine = create_engine(DATABASE_URL, echo=False)
-        conn = engine.connect()
-        conn.close()
-        print("Database connection successful")
-        break
-    except OperationalError as e:
-        print(f"Database connection failed ({attempt+1}/{max_retries}), retrying in {retry_delay}s...")
-        time.sleep(retry_delay)
-else:
-    raise Exception("Database connection failed after multiple retries.")
+engine = create_async_engine(
+    DATABASE_URL,
+    echo=False,
+    pool_size=10,
+    max_overflow=10,
+    pool_timeout=15
+)
 
-SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+AsyncSessionLocal = async_sessionmaker(
+    bind=engine, 
+    autocommit=False, 
+    autoflush=False, 
+    expire_on_commit=False, 
+    class_=AsyncSession # Class olarak AsyncSession kullan
+)
+
 Base = declarative_base()
 
-def get_db():
-    db = SessionLocal()
+
+async def get_db():
+    db = AsyncSessionLocal()
     try:
         yield db
+    except Exception as e:
+        await db.close() 
+        raise e
     finally:
-        db.close()
+        await db.close()

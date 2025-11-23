@@ -2,29 +2,31 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from model.task_model import Task
 from controller import task_controller
-from utils.utils import seed_data #clean_tasks
+from utils.utils import check_database_connection, check_redis_connection, create_table, database_seeder #clean_tasks
 from config.logger import logger
 from exception.exception_handler import setup_exception_handlers
-from config.db import Base, SessionLocal, engine
+from config.db import engine
+from config.logger import logger
+
 
 app = FastAPI(title="Task Manager API")
 
 setup_exception_handlers(app)
 
 @app.on_event("startup")
-def on_start():
-    logger.info("App starting...")
-    Base.metadata.create_all(bind=engine)
-    db = SessionLocal()
-    if db.query(Task).count() == 0:
-        seed_data()
-    db.close()
-    print("---App started successfully---")
+async def on_start():
+    await logger.info("App starting...")
+    await check_database_connection()
+    await check_redis_connection()
+    await create_table()
+    await database_seeder()
+
+    await logger.info("---App started successfully---")
 
 @app.on_event("shutdown")
-def on_shutdown():
-    engine.dispose() 
-    print("---App shutdown successfully---")
+async def on_shutdown():
+    await engine.dispose() 
+    await logger.info("---App shutdown successfully---")
 
 origins = [
     "http://localhost:5173",

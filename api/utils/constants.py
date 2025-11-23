@@ -1,0 +1,1 @@
+redis_all_task_key = "all:tasks"
