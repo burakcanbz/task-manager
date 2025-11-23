@@ -36,7 +36,7 @@ AsyncSessionLocal = async_sessionmaker(
     autocommit=False, 
     autoflush=False, 
     expire_on_commit=False, 
-    class_=AsyncSession # Class olarak AsyncSession kullan
+    class_=AsyncSession
 )
 
 Base = declarative_base()
