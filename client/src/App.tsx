@@ -72,9 +72,9 @@ function App() {
       prev.map((task) =>
         task.id === id
           ? {
-              ...task,
-              status: task.status === "completed" ? "incomplete" : "completed",
-            }
+            ...task,
+            status: task.status === "completed" ? "incomplete" : "completed",
+          }
           : task
       )
     );
@@ -177,12 +177,12 @@ function App() {
 
         <div className="tasks-container">
           {filteredAndSortedTasks.length === 0 ? (
-            <div className="empty-state">
-              <p>
+            <div className="empty-state" style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
+              <div>
                 {tasks.length === 0
-                  ? "No tasks yet. Add your first task above!"
+                  ? <div className="loader"></div>
                   : "No tasks match your filters. Try adjusting your search or filters."}
-              </p>
+              </div>
             </div>
           ) : (
             <ul className="task-list">
