@@ -6,6 +6,7 @@ A **Task Management API** built with **FastAPI** using a **layered architecture*
 
 ## Table of Contents
 - Architecture
+- Celery Usage
 - Performance Optimizations
 - Environment Configuration
 - Requirements
