@@ -19,7 +19,7 @@ services:
     env_file:
       - ./api/.env.prod
     command: redis-server --requirepass redispassword
-    ports: 
+    ports:
       - "6379:6379"
     volumes:
       - redis_data:/data
@@ -40,9 +40,38 @@ services:
     networks:
       - app-network
 
+  celery_worker:
+    build: ./api
+    container_name: celery_worker
+    command: celery -A config.celery_config worker --loglevel=info
+    volumes:
+      - ./api:/app
+    env_file:
+      - ./api/.env.prod
+    depends_on:
+      - db
+      - redis
+    networks:
+      - app-network
+
+  celery_beat:
+    build: ./api
+    container_name: celery_beat
+    command: celery -A config.celery_config beat --loglevel=info
+    volumes:
+      - ./api:/app
+    env_file:
+      - ./api/.env.prod
+    depends_on:
+      - db
+      - redis
+    networks:
+      - app-network
+
 volumes:
   postgres_data:
   redis_data:
+
 
 networks:
   app-network:

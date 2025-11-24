@@ -16,5 +16,13 @@ else
     echo "Redis container created"
 fi
 
-cd ./api
+cd ./api || exit
+
+if [ -f "./venv/bin/activate" ]; then
+    source ./venv/bin/activate
+    echo "Virtual environment activated"
+else
+    echo "No venv found, please create one first"
+fi
+
 python -m uvicorn app:app --reload

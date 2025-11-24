@@ -37,6 +37,82 @@ The API is designed using a **layered architecture**, which separates responsibi
 - **Scalability:** Supports larger applications and teams by clearly separating responsibilities.
 
 ---
+## Celery 
+
+Celery has the same exchange types as RabbitMQ.
+DIRECT EXCHANGE:
+Just like in RabbitMQ, you can define a specific routing key and queue for each task. The task goes only to the matching queue. It's a one-to-one mapping. An email task only goes to the email_queue, nowhere else.
+TOPIC EXCHANGE:
+You can cause wildcard patterns to route tasks. For example, the send_* pattern routes all send operations like send_email, send_sms, send_push to the notifications queue. Similar jobs are grouped in one queue.
+FANOUT EXCHANGE:
+The simplest and broadest type. When a task is published, all queues receive it. All workers process the same message. Used for system-wide broadcast messages. For example, a system maintenance alert that all workers should know about.
+In short: Direct = specific, Topic = pattern-based, Fanout = broadcast. The logic is the same as RabbitMQ, just configured more simply in Celery with Python.
+
+## In This Project
+
+**Celery** is used to handle background tasks. I used **Celery Beat** as a scheduler to trigger a background task every 20 minutes. Because I don't have any long-running tasks, I used **Celery Worker** to handle the task.
+
+### How it Works
+
+- **Celery Beat**: Schedules the `generate_task_report` task.
+- **Redis**: Acts as the message broker and cache.
+- **Celery Worker**: Picks up the task, retrieves recently created tasks, and writes them to a `tasks_report.txt` file.
+
+This architecture ensures that reporting operations do not block the main API and run independently.
+
+### Architecture Diagram
+
+```text
+┌─────────────┐
+│   FastAPI   │
+│   (App)     │
+└────┬────────┘
+     │
+     ↓ (Task CRUD operations)
+┌──────────────────┐
+│  Service Layer   │
+│  (Write to Redis)│
+└──────────────────┘
+        │
+        ↓
+┌─────────────────┐
+│      Redis      │ ← Tasks stored here
+└───────┬─────────┘
+        │ 
+        ↓ (Every 20 minutes)
+┌──────────────────┐
+│    Celery Beat   │ (Scheduler/Trigger)
+└───────┬──────────┘
+        │
+        ↓
+┌──────────────────┐
+│    Celery Worker │ ← Read from Redis
+└───────┬──────────┘
+        │
+        ↓ (Fetch tasks) 
+┌─────────────────┐
+│      Redis      │ ← Retrieve recent tasks
+└───────┬─────────┘
+        │
+        ↓
+┌──────────────┐
+│ Report File  │ ← Write report
+└──────────────┘
+```
+
+### Running the Worker
+The Celery worker runs as a separate process, independent of the FastAPI application.
+
+To start the worker manually:
+```bash
+celery -A config.celery_config.celery_app worker --loglevel=info
+```
+
+To start the beat scheduler manually from another terminal:
+```bash
+celery -A config.celery_config.celery_app beat --loglevel=info
+```
+---
 
 ## Performance Optimizations
 
